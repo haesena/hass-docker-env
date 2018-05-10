@@ -1,0 +1,9 @@
+FROM alpine
+
+RUN apk update && \
+	apk add --no-cache py-future py2-future && \
+	apk add --no-cache certbot
+
+RUN mkdir -m 777 -p /usr/scripts
+
+COPY ./virtualization/letsencrypt/check_certs.sh /usr/scripts/

@@ -1,0 +1,68 @@
+version: '3'
+volumes:
+  letsencrypt_certs:
+  letsencrypt_www:
+services:
+  samba:
+    build:
+      context: ./
+      dockerfile: virtualization/samba/dockerfile
+    ports:
+      - "137-139:137-139"
+      - "445:445"
+    volumes:
+      - /home/pi/home-assistant:/shared
+    restart: always
+  homeassistant:
+    image: homeassistant/raspberrypi3-homeassistant:0.68.1
+    volumes:
+      - /home/pi/home-assistant/config:/config
+      - /etc/localtime:/etc/localtime:ro
+    expose:
+      - "8123"
+    depends_on: 
+      - samba 
+    network_mode: host
+    restart: always
+  nginx:
+    build:
+      context: ./
+      dockerfile: virtualization/nginx/dockerfile
+      args:
+        - domain=YOUR_DOMAIN
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8123:8123"
+    depends_on:
+      - homeassistant
+    volumes:
+      - letsencrypt_www:/var/www/letsencrypt
+      - letsencrypt_certs:/etc/letsencrypt
+    network_mode: host
+    restart: always
+  letsencrypt:
+    build:
+      context: ./
+      dockerfile: virtualization/letsencrypt/dockerfile
+    entrypoint: ["/usr/scripts/check_certs.sh"]
+    environment:
+      - LETSENCRYPT_DOMAIN=YOUR_DOMAIN
+      - LETSENCRYPT_EMAIL=YOUR_EMAIL
+    depends_on:
+      - nginx
+    volumes:
+      - letsencrypt_www:/var/www/letsencrypt
+      - letsencrypt_certs:/etc/letsencrypt
+  duckdns:
+    build:
+      context: ./
+      dockerfile: virtualization/duckdns/dockerfile
+    entrypoint: ["/usr/scripts/duck.sh"]
+    environment:
+      - DUCKDNS_DOMAIN=DUCKDNS_DOMAINNAME
+      - DUCKDNS_TOKEN=DUCKDNS_TOKEN
+    depends_on:
+      - nginx
+
+

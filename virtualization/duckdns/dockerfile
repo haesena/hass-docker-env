@@ -1,0 +1,8 @@
+FROM alpine
+
+RUN mkdir -m 777 -p /usr/scripts /usr/logs
+
+COPY ./virtualization/duckdns/duck.sh /usr/scripts/
+
+RUN apk update && \
+	apk add --no-cache curl
