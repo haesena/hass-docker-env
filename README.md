@@ -45,7 +45,6 @@ curl -sSL https://get.docker.com | sh
 sudo usermod -aG docker pi
 # enable docker
 sudo systemctl enable docker
-sudo systemctl start docker
 
 # install docker-compose
 sudo apt-get -y install python-pip
@@ -55,6 +54,7 @@ sudo pip install docker-compose
 sudo reboot
 
 # start docker
+sudo systemctl start docker
 ```
 
 ## Settings up the docker environment
