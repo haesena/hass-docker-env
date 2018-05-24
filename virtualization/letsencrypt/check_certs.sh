@@ -1,10 +1,13 @@
 #!/bin/sh
 
-if [[ -f "/usr/scripts/certs_created" ]]; then
+if [[ -f "/var/www/letsencrypt/certs_created" ]]; then
 	echo "renewing"
 	/usr/bin/certbot renew
 else
 	echo "initializing"
+	
+	rm -rf /etc/letsencrypt/live/
+
 	/usr/bin/certbot certonly \
 	 	--webroot \
 	 	-w /var/www/letsencrypt \
@@ -12,5 +15,5 @@ else
 	 	--email $LETSENCRYPT_EMAIL \
 	 	--agree-tos -n
 
-	touch /usr/scripts/certs_created
+	touch /var/www/letsencrypt/certs_created
 fi
