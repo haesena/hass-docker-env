@@ -61,8 +61,14 @@ sudo pip install docker-compose
 Get the docker enironment by cloning this repository
 
 ```bash
-git clone https://github.com/haesena/hass-docker-env.git
+git clone https://github.com/haesena/hass-docker-env.git home-assistant
 ```
 
-Ooen the file docker-compose.yml and replace the build argument for the nginx containert and the environment variables for the duckdns and letsencrypt containers as detailed in the section Environment variables.
+Open the file docker-compose.yml and replace the build argument for the nginx containert and the environment variables for the duckdns and letsencrypt containers as detailed in the section Environment variables.
 
+Change to the home-assistant directory and run the `up` command to build and start the containers:
+
+```bash
+cd home-assistant
+docker-compose up
+```
