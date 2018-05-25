@@ -11,12 +11,12 @@ services:
       - "137-139:137-139"
       - "445:445"
     volumes:
-      - /home/pi/home-assistant:/shared
+      - .:/shared
     restart: always
   homeassistant:
     image: homeassistant/raspberrypi3-homeassistant:0.68.1
     volumes:
-      - /home/pi/home-assistant/config:/config
+      - ./config:/config
       - /etc/localtime:/etc/localtime:ro
     expose:
       - "8123"
