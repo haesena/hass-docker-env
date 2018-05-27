@@ -2,5 +2,5 @@
 
 cd ~/home-assistant
 
-docker-compose run --rm letsencrypt
+/usr/local/bin/docker-compose run --rm letsencrypt
 

@@ -2,5 +2,5 @@
 
 cd ~/home-assistant
 
-docker-compose run --rm duckdns
+/usr/local/bin/docker-compose run --rm duckdns
 
