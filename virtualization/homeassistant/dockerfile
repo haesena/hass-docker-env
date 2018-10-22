@@ -1,0 +1,13 @@
+FROM homeassistant/raspberrypi3-homeassistant:latest
+
+RUN pip3 install --no-cache-dir --upgrade pywebpush
+
+RUN mkdir -m 777 -p /data
+RUN mkdir -m 777 -p /hass-db
+
+VOLUME /hass-db
+VOLUME /data
+
+COPY start-hass.sh /start-hass.sh
+
+ENTRYPOINT ["/start-hass.sh"]

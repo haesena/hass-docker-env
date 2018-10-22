@@ -1,0 +1,16 @@
+sensor.hass_db_size:
+  friendly_name: DB-Size
+  icon: mdi:database
+sensor.ssl_cert_expiry:
+  friendly_name: SSL Certificate Expiry
+  icon: mdi:certificate
+sensor.disk_use_:
+  friendly_name: Disk use
+script.turn_off_heating:
+  icon: mdi:power-cycle
+script.turn_on_heating:
+  icon: mdi:power
+binary_sensor.smoke_kitchen:
+  device_class: smoke
+binary_sensor.smoke_livingroom:
+  device_class: smoke

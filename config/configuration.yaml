@@ -1,0 +1,124 @@
+homeassistant:
+  # Name of the location where Home Assistant is running
+  name: Home
+  # Location required to calculate the time the sun rises and sets
+  latitude: !secret latitude
+  longitude: !secret longitude
+  # Impacts weather/sunrise data (altitude above sea level in meters)
+  elevation: 167
+  # metric for Metric, imperial for Imperial
+  unit_system: metric
+  # Pick yours from here: http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+  time_zone: Europe/Paris
+  customize: !include includes/customized.yaml
+
+map:
+
+# Enables the frontend
+frontend:
+
+# Enables configuration UI
+config:
+
+http:
+  # Uncomment this to add a password (recommended!)
+  api_password: !secret hass_pw
+
+# Checks for available updates
+# Note: This component will send some information about your system to
+# the developers to assist with development of Home Assistant.
+# For more information, please see:
+# https://home-assistant.io/blog/2016/10/25/explaining-the-updater/
+updater:
+  # Optional, allows Home Assistant developers to focus on popular components.
+  # include_used_components: true
+
+device_tracker:
+#  - platform: owntracks
+  - platform: google_maps
+    username: !secret google_maps_user
+    password: !secret google_maps_password
+  - platform: nmap_tracker
+    hosts:
+      - 192.168.1.20
+    track_new_devices: false
+
+# Discover some devices automatically
+discovery:
+
+# Allows you to issue voice commands from the frontend in enabled browsers
+conversation:
+
+# Enables support for tracking state changes over time
+history:
+
+recorder: !include includes/recorder.yaml
+
+zone: !include includes/zones.yaml
+
+# View all events in a logbook
+logbook:
+
+# Track the sun
+sun:
+
+
+# Text to speech
+tts:
+  - platform: google
+
+zwave:
+  usb_path: /dev/ttyACM0
+
+climate:
+  - platform: zwave
+
+notify:
+  platform: html5
+  gcm_api_key: !secret gcm_api_key
+  gcm_sender_id: !secret gcm_sender_id
+
+input_boolean: !include includes/input_booleans.yaml
+#input_number: !include includes/input_numbers.yaml
+sensor: !include includes/sensors.yaml
+binary_sensor: !include includes/binary_sensors.yaml
+
+group: !include includes/groups.yaml
+automation: !include_dir_merge_list includes/automations
+
+camera: !include includes/cameras.yaml
+
+google_assistant:
+  project_id: !secret ga_project_id
+  api_key: !secret ga_api_key
+
+mqtt:
+  broker: 192.168.1.30
+  port: 1883
+  client_id: home-assistant-1
+  username: !secret mqtt_username
+  password: !secret mqtt_password
+  keepalive: 60
+
+switch: !include includes/switches.yaml
+
+python_script:
+
+script: !include includes/scripts.yaml
+
+shell_command:
+  log_work_start:  echo "$(date +%Y-%m-%d);$(date +%H:%M:%S);start" >> /data/work_hours.csv
+  log_work_end:  echo "$(date +%Y-%m-%d);$(date +%H:%M:%S);end" >> /data/work_hours.csv
+
+rfxtrx:
+  device: /dev/ttyUSB0
+
+cover:
+  - platform: rfxtrx
+    automatic_add: False
+    signal_repetitions: 2
+    devices:
+      071a000003071001:
+        name: Shutter hallway
+      071a000003071101:
+        name: Shutter bedroom

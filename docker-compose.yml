@@ -2,29 +2,96 @@ version: '3'
 volumes:
   letsencrypt_certs:
   letsencrypt_www:
+  appdaemon_install:
 services:
+
   samba:
+    container_name: samba
     build:
-      context: ./
-      dockerfile: virtualization/samba/dockerfile
+      context: ./virtualization/samba/
+      dockerfile: ./dockerfile
     ports:
       - "137-139:137-139"
       - "445:445"
     volumes:
       - .:/shared
+      - /data/nas:/shared2
     restart: always
+
+  mqtt:
+    container_name: mqtt
+    build:
+      context: ./
+      dockerfile: virtualization/mosquitto/dockerfile
+    ports:
+      - "1883:1883"
+      - "9001:9001"
+    volumes:
+      - ./virtualization/mosquitto/config:/mqtt/config
+    restart: always
+
+  mysql:
+    container_name: mysql
+    image: hypriot/rpi-mysql
+    network_mode: host
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=mysql_root_password
+      - MYSQL_DATABASE=hass_db
+      - MYSQL_USER=hassuser
+      - MYSQL_PASSWORD=mysql_password
+    volumes:
+      - /data/hass-db/mysql:/var/lib/mysql
+
+  ftp:
+    container_name: ftp
+    image: stilliard/pure-ftpd:hardened
+    ports:
+      - "21:21"
+    volumes:
+      - "./ftp/data:/home/ftpusers/"
+      - "./ftp/passwd:/etc/pure-ftpd/passwd"
+    environment:
+      PUBLICHOST: "localhost"
+
   homeassistant:
-    image: homeassistant/raspberrypi3-homeassistant:0.68.1
+    container_name: hass
+    build:
+      context: ./virtualization/homeassistant/
+      dockerfile: ./dockerfile
     volumes:
       - ./config:/config
+      - /data/nas/hass:/data
+      - /data/hass-db:/hass-db
       - /etc/localtime:/etc/localtime:ro
+      - letsencrypt_certs:/etc/letsencrypt
     expose:
       - "8123"
-    depends_on: 
+    depends_on:
       - samba 
+      - mqtt 
+      - mysql
     network_mode: host
+    restart: unless-stopped
+    devices:
+      - "/dev/ttyACM0:/dev/ttyACM0"
+      - "/dev/ttyUSB0:/dev/ttyUSB0"
+
+  appdaemon:
+    container_name: appdaemon
+    build:
+      context: ./virtualization/appdaemon/
+      dockerfile: ./dockerfile
+    volumes:
+      - ./config:/conf
+      - /etc/localtime:/etc/localtime:ro
     restart: always
+    depends_on:
+      - homeassistant
+
   nginx:
+    container_name: nginx
     build:
       context: ./
       dockerfile: virtualization/nginx/dockerfile
@@ -41,6 +108,7 @@ services:
       - letsencrypt_certs:/etc/letsencrypt
     network_mode: host
     restart: always
+
   letsencrypt:
     build:
       context: ./
@@ -54,6 +122,7 @@ services:
     volumes:
       - letsencrypt_www:/var/www/letsencrypt
       - letsencrypt_certs:/etc/letsencrypt
+      
   duckdns:
     build:
       context: ./
@@ -64,5 +133,3 @@ services:
       - DUCKDNS_TOKEN=DUCKDNS_TOKEN
     depends_on:
       - nginx
-
-

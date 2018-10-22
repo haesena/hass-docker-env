@@ -1,0 +1,76 @@
+- alias: 'Battery Low Alert - Livingroom 1'
+  trigger:
+    platform: numeric_state
+    entity_id: sensor.battery_livingroom_1
+    below: 10
+  action:
+    service: notify.notify
+    data:
+      message: "The Battery of the livingroom thermostat 2 is running low (<10%)"
+      title: "Low battery"
+- alias: 'Battery Low Alert - Livingroom 2'
+  trigger:
+    platform: numeric_state
+    entity_id: sensor.battery_livingroom_2
+    below: 10
+  action:
+    service: notify.notify
+    data:
+      message: "The Battery of the livingroom thermostat 2 is running low (<10%)"
+      title: "Low battery"
+- alias: 'Battery Low Alert - Kitchen'
+  trigger:
+    platform: numeric_state
+    entity_id: sensor.battery_kitchen
+    below: 10
+  action:
+    service: notify.notify
+    data:
+      message: "The Battery of the kitchen thermostat is running low (<10%)"
+      title: "Low battery"
+- alias: 'Battery Low Alert - Bedroom'
+  trigger:
+    platform: numeric_state
+    entity_id: sensor.battery_bedroom
+    below: 10
+  action:
+    service: notify.notify
+    data:
+      message: "The Battery of the bedroom thermostat is running low (<10%)"
+      title: "Low battery"
+- alias: 'Battery Low Alert - Bathroom'
+  trigger:
+    platform: numeric_state
+    entity_id: sensor.battery_bathroom
+    below: 10
+  action:
+    service: notify.notify
+    data:
+      message: "The Battery of the bathroom thermostat is running low (<10%)"
+      title: "Low battery"
+
+
+- alias: "New Upate available"
+  trigger: 
+    - platform: state
+      entity_id: sensor.ha_latest
+  action:
+    service: notify.notify
+    data:
+      message: "Home Assistant {{states.sensor.ha_latest.state}} is now available."
+      title: "New update available"
+      target: "alex_phone"
+
+
+- alias: "SSL Cert renewed"
+  trigger: 
+    - platform: state
+      entity_id: sensor.ssl_cert_expiry
+  action:
+    service: notify.notify
+    data:
+      message: "The Let's Encrypt certificate has been renewed (expiry: {{states.sensor.ssl_cert_expiry.state}})."
+      title: "SSL Cert renewed"
+      target: "alex_phone"
+      data:
+        url: "/states/group.system"

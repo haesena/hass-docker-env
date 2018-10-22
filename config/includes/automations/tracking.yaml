@@ -1,0 +1,42 @@
+- alias: 'Alex arriving at work'
+  trigger:
+    platform: zone
+    event: enter
+    zone: zone.work_alex
+    entity_id: device_tracker.google_maps_115300975537482092784
+  condition:
+  - condition: state
+    entity_id: input_boolean.working
+    state: 'off' 
+  action:
+    service: notify.notify
+    data:
+      message: "You seem to be arriving at work, do you want to check in?"
+      title: "Arrived at work"
+      target: "alex_phone"
+      data:
+        tag: "arrived_at_work"
+        actions:
+          - action: work_check_in
+            title: "Check in"
+- alias: 'Alex leaving work'
+  trigger:
+    platform: zone
+    event: leave
+    zone: zone.work_alex
+    entity_id: device_tracker.google_maps_115300975537482092784
+  condition:
+  - condition: state
+    entity_id: input_boolean.working
+    state: 'on' 
+  action:
+    service: notify.notify
+    data:
+      message: "You seem to be leaving work, do you want to check out?"
+      title: "Leaving work"
+      target: "alex_phone"
+      data:
+        tag: "leaving_work"
+        actions:
+          - action: work_check_out
+            title: "Check out"

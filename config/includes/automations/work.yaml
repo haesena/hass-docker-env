@@ -1,0 +1,41 @@
+- alias: "Start working"
+  trigger:
+    - platform: mqtt
+      topic: events/work/start
+    - platform: event
+      event_type: html5_notification.clicked
+      event_data:
+        action: work_check_in
+  action:
+    - service: input_boolean.turn_on
+      data:
+        entity_id: input_boolean.working
+
+- alias: "Stop working"
+  trigger: 
+    - platform: mqtt
+      topic: events/work/stop
+    - platform: event
+      event_type: html5_notification.clicked
+      event_data:
+        action: work_check_out
+  action:
+    - service: input_boolean.turn_off
+      data:
+        entity_id: input_boolean.working
+
+- alias: "Started working"
+  trigger: 
+    - platform: state
+      entity_id: input_boolean.working
+      to: 'on' 
+  action:
+    - service: shell_command.log_work_start
+
+- alias: "Stopped working"
+  trigger: 
+    - platform: state
+      entity_id: input_boolean.working
+      to: 'off' 
+  action:
+    - service: shell_command.log_work_end

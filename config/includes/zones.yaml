@@ -1,0 +1,10 @@
+- name: Home
+  latitude: !secret latitude
+  longitude: !secret longitude
+  radius: 50
+  icon: mdi:briefcase
+- name: Work Alex
+  latitude: !secret latitude_work_alex
+  longitude: !secret longitude_work_alex
+  radius: 80
+  icon: mdi:briefcase

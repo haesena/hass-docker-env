@@ -1,0 +1,127 @@
+- alias: 'Update Thermostats At Start'
+  trigger:
+    platform: event
+    event_type: zwave.network_ready
+  action:
+    - service: python_script.update_thermostat_state
+      data:
+        thermostat: climate.radiator_livingroom_1
+    - service: python_script.update_thermostat_state
+      data:
+        thermostat: climate.radiator_livingroom_2
+        sensor: sensor.livingroom_temperature
+    - service: python_script.update_thermostat_state
+      data:
+        thermostat: climate.radiator_kitchen
+        sensor: sensor.livingroom_temperature
+    - service: python_script.update_thermostat_state
+      data:
+        thermostat: climate.radiator_bedroom
+        sensor: sensor.bedroom_temperature
+    - service: python_script.update_thermostat_state
+      data:
+        thermostat: climate.radiator_bathroom
+        sensor: sensor.bedroom_temperature
+
+
+- alias: 'Set Thermostat state Livingroom 1'
+  trigger:
+    platform: state
+    entity_id:
+      - climate.radiator_livingroom_1
+  action:
+    - service: python_script.update_thermostat_state
+      data:
+        thermostat: climate.radiator_livingroom_1
+
+
+- alias: 'Set Thermostat state Livingroom 2'
+  trigger:
+    platform: state
+    entity_id:
+      - climate.radiator_livingroom_2
+      - sensor.livingroom_temperature
+  condition:
+    condition: template
+    value_template: >-
+      {% if "climate" in trigger.entity_id and trigger.to_state.attributes.current_temperature == none %}
+         true
+      {% elif "sensor" in trigger.entity_id %}
+         true
+      {% else %}
+         false
+      {% endif %}
+  action:
+    - service: python_script.update_thermostat_state
+      data:
+        thermostat: climate.radiator_livingroom_2
+        sensor: sensor.livingroom_temperature
+
+
+- alias: 'Set Thermostat state Kitchen'
+  trigger:
+    platform: state
+    entity_id:
+      - climate.radiator_kitchen
+      - sensor.livingroom_temperature
+  condition:
+    condition: template
+    value_template: >-
+      {% if "climate" in trigger.entity_id and trigger.to_state.attributes.current_temperature == none %}
+         true
+      {% elif "sensor" in trigger.entity_id %}
+         true
+      {% else %}
+         false
+      {% endif %}
+  action:
+    - service: python_script.update_thermostat_state
+      data:
+        thermostat: climate.radiator_kitchen
+        sensor: sensor.livingroom_temperature
+
+
+- alias: 'Set Thermostat state Bedroom'
+  trigger:
+    platform: state
+    entity_id:
+      - climate.radiator_bedroom
+      - sensor.bedroom_temperature
+  condition:
+    condition: template
+    value_template: >-
+      {% if "climate" in trigger.entity_id and trigger.to_state.attributes.current_temperature == none %}
+         true
+      {% elif "sensor" in trigger.entity_id %}
+         true
+      {% else %}
+         false
+      {% endif %}
+  action:
+    - service: python_script.update_thermostat_state
+      data:
+        thermostat: climate.radiator_bedroom
+        sensor: sensor.bedroom_temperature
+
+
+- alias: 'Set Thermostat state Bathroom'
+  trigger:
+    platform: state
+    entity_id:
+      - climate.radiator_bathroom
+      - sensor.bedroom_temperature
+  condition:
+    condition: template
+    value_template: >-
+      {% if "climate" in trigger.entity_id and trigger.to_state.attributes.current_temperature == none %}
+         true
+      {% elif "sensor" in trigger.entity_id %}
+         true
+      {% else %}
+         false
+      {% endif %}
+  action:
+    - service: python_script.update_thermostat_state
+      data:
+        thermostat: climate.radiator_bathroom
+        sensor: sensor.bedroom_temperature

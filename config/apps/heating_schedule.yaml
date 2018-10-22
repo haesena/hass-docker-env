@@ -1,0 +1,48 @@
+heating_schedule:
+  module: hass_apps_loader
+  class: HeatyApp
+
+  # we use basic thermostats that dont support ON/OFF
+  # just temperature setpoints, so no opmodes
+  thermostat_defaults:
+    supports_opmodes: false
+
+  schedule_prepend:
+    - temp: Break() if is_off("input_boolean.auto_heat") else Skip()
+
+  rooms:
+    # Livingroom and kitchen
+    downstairs:
+      thermostats:
+        climate.radiator_livingroom_1:
+        climate.radiator_livingroom_2:
+        climate.radiator_kitchen:
+      schedule:
+      # From Monday to Friday, heat in the morning and in the evening
+      - { temp: 20, start: "05:20", end: "07:00", weekdays: "1-4" }
+      - { temp: 20, start: "16:00", end: "21:00", weekdays: "1-4" }
+      # On weekends, heat all day
+      - { temp: 20, start: "07:00", end: "22:00", weekdays: "5-7" }
+      # At all other times, set temperature to 16 °C.
+      - { temp: 15 }
+
+    # Bedroom
+    bedroom:
+      thermostats:
+        climate.radiator_bedroom:
+      schedule:
+      - { temp: 20.5, start: "05:00", end: "06:30", weekdays: "1-4" }
+      - { temp: 20.5, start: "06:00", end: "08:00", weekdays: "5-7" }
+      - { temp: 20.5, start: "21:00", end: "23:00" }
+      - { temp: 15 }
+    
+    # Bathroom
+    bathroom:
+      thermostats:
+        climate.radiator_bathroom:
+      schedule:
+      - temp: 23 if is_on("input_boolean.power_heat_bathroom") else Skip()
+      - { temp: 20.5, start: "05:00", end: "06:30", weekdays: "1-4" }
+      - { temp: 20.5, start: "06:00", end: "09:00", weekdays: "5-7" }
+      - { temp: 20.5, start: "21:00", end: "23:00" }
+      - { temp: 18 }

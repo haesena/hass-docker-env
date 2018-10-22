@@ -1,0 +1,114 @@
+- platform: wunderground
+  api_key: !secret wunderground_api_key
+  monitored_conditions:
+    - weather_1d_metric
+    - feelslike_c
+    - temp_high_1d_c
+    - temp_low_1d_c
+    - precip_1d
+    - precip_1d_mm
+    - wind_1d_kph
+
+- platform: systemmonitor
+  resources:
+    - type: disk_use_percent
+      arg: /
+    - type: memory_use_percent
+    - type: last_boot
+
+- platform: speedtest
+  monitored_conditions:
+    - ping
+    - download
+    - upload 
+
+- platform: sql
+  db_url: !secret db_url
+  scan_interval: 7200
+  queries:
+    - name: hass_db_size
+      query: "SELECT table_schema 'database', Round(Sum(data_length + index_length) / 1024 / 1024, 1) 'value' FROM information_schema.tables WHERE table_schema = 'hass_db' GROUP BY table_schema"
+      column: 'value'
+      unit_of_measurement: MiB
+
+- platform: command_line
+  command: python3 -c "import requests; print(requests.get('https://pypi.python.org/pypi/homeassistant/json').json()['info']['version'])"
+  name: ha_latest
+  scan_interval: 3600
+
+- platform: command_line
+  name: ssl_cert_expiry
+  command: "bash /config/scripts/ssl-cert-expiry.sh"
+  scan_interval: 43200
+  
+- platform: template
+  sensors:
+    battery_livingroom_1:
+      friendly_name: 'Livingroom 1'
+      value_template: >-
+        {% if states.zwave.livingroom_radiator_1 %}
+        {{ states.zwave.livingroom_radiator_1.attributes.battery_level }}
+        {% else %}n/a{% endif %}
+      unit_of_measurement: '%'
+      icon_template: mdi:battery-charging
+    battery_livingroom_2:
+      friendly_name: 'Livingroom 2'
+      value_template: >-
+        {% if states.zwave.livingroom_radiator_2 %}
+        {{ states.zwave.livingroom_radiator_2.attributes.battery_level }}
+        {% else %}n/a{% endif %}
+      unit_of_measurement: '%'
+      icon_template: mdi:battery-charging
+    battery_kitchen:
+      friendly_name: 'Kitchen'
+      value_template: >-
+        {% if states.zwave.kitchen_radiator %}
+        {{ states.zwave.kitchen_radiator.attributes.battery_level }}
+        {% else %}n/a{% endif %}
+      unit_of_measurement: '%'
+      icon_template: mdi:battery-charging
+    battery_bedroom:
+      friendly_name: 'Bedroom'
+      value_template: >-
+        {% if states.zwave.bedroom_radiator %}
+        {{ states.zwave.bedroom_radiator.attributes.battery_level }}
+        {% else %}n/a{% endif %}
+      unit_of_measurement: '%'
+      icon_template: mdi:battery-charging
+    battery_bathroom:
+      friendly_name: 'Bathroom'
+      value_template: >-
+        {% if states.zwave.bathroom_radiator %}
+        {{ states.zwave.bathroom_radiator.attributes.battery_level }}
+        {% else %}n/a{% endif %}
+      unit_of_measurement: '%'
+      icon_template: mdi:battery-charging
+    battery_smoke_sensor_kitchen:
+      friendly_name: 'Kitchen'
+      value_template: >-
+        {% if states.zwave.kitchen_smoke_sensor %}
+        {{ states.zwave.kitchen_smoke_sensor.attributes.battery_level }}
+        {% else %}n/a{% endif %}
+      unit_of_measurement: '%'
+      icon_template: mdi:battery-charging
+    battery_smoke_sensor_livingroom:
+      friendly_name: 'Livingroom'
+      value_template: >-
+        {% if states.zwave.livingroom_smoke_sensor %}
+        {{ states.zwave.livingroom_smoke_sensor.attributes.battery_level }}
+        {% else %}n/a{% endif %}
+      unit_of_measurement: '%'
+      icon_template: mdi:battery-charging
+
+
+- platform: rfxtrx
+  automatic_add: True
+  devices:
+    085002015c01011a79:
+      name: Bedroom
+    085002080802011479:
+      name: Outside
+    085002058104011569:
+      name: Livingroom
+
+

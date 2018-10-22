@@ -1,0 +1,11 @@
+auto_heat:
+  name: Automatic Heating
+  icon: mdi:clock
+power_heat_bathroom:
+  name: Power Heat Bathroom
+  initial: off
+  icon: mdi:shower
+working:
+  name: Is Working
+  initial: off
+  icon: mdi:power

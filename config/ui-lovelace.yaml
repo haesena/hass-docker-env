@@ -1,0 +1,175 @@
+title: WZW
+
+views:
+  - title: Home
+    icon: mdi:home-assistant
+    id: home
+    # background: radial-gradient(crimson, skyblue)
+    cards:
+      - type: entities
+        title: People
+        show_header_toggle: false
+        entities:
+          - device_tracker.galaxys9home
+          - device_tracker.google_maps_115300975537482092784
+          - input_boolean.working
+      - type: entities
+        title: Weather
+        entities:
+          - sensor.pws_weather_1d_metric
+          - sensor.pws_feelslike_c
+          - sensor.pws_temp_high_1d_c
+          - sensor.pws_temp_low_1d_c
+          - sensor.pws_precip_1d
+          - sensor.pws_precip_1d_mm
+          - sensor.pws_wind_1d_kph
+#      - type: conditional
+#        conditions:
+#          - entity: persistent_notification.invalid_config
+#            state: "notifying"
+#        card:
+#          type: entities
+#          title: Error
+#          entities:
+#            - persistent_notification.invalid_config
+
+  - title: Heating
+    icon: mdi:thermometer
+    id: heating
+    badges:
+      - sensor.outside_temperature
+      - sensor.livingroom_temperature
+      - sensor.bedroom_temperature
+    cards:
+      - type: entities
+        title: Downstairs
+        entities:
+          - entity: climate.radiator_livingroom_1
+            name: Livingroom 1
+          - entity: climate.radiator_livingroom_2
+            name: Livingroom 2
+          - entity: climate.radiator_kitchen
+            name: Kitchen
+      - type: entities
+        title: Upstairs
+        entities:
+          - entity: climate.radiator_bedroom
+            name: Bedroom
+          - entity: climate.radiator_bathroom
+            name: Bathroom
+
+      - type: entities
+        title: Actions
+        show_header_toggle: false
+        entities:
+          - script.turn_on_heating
+          - script.turn_off_heating
+          - input_boolean.auto_heat
+          - input_boolean.power_heat_bathroom
+
+  - title: Shutters
+    icon: mdi:window-open
+    id: shutters
+    cards:
+      - type: entities
+        title: Downstairs
+        entities:
+          - entity: cover.shutter_terrace
+            name: Terrace
+          - entity: cover.shutter_garden
+            name: Garden
+      - type: entities
+        title: Upstairs
+        entities:
+          - entity: cover.shutter_hallway
+            name: Hallway
+          - entity: cover.shutter_bedroom
+            name: Bedroom
+
+      - type: entities
+        title: Actions
+        show_header_toggle: false
+        entities:
+          - script.close_all_covers
+          - script.open_all_covers
+          - script.covers_sunny_mode
+          - script.covers_movie_mode
+
+  - title: Power
+    icon: mdi:power-plug
+    id: power
+    cards:
+      - type: entities
+        title: Power Switches
+        show_header_toggle: false
+        entities:
+          - switch.tv_switch_bedroom_switch
+          - switch.friteuse
+          - switch.egg_cooker
+
+  - title: Sonos
+    icon: mdi:speaker
+    id: sonos
+    cards:
+      - type: media-control
+        entity: media_player.kitchen
+      - type: media-control
+        entity: media_player.living_room
+      - type: media-control
+        entity: media_player.bathroom
+      - type: media-control
+        entity: media_player.master_bedroom
+
+  - title: Security
+    icon: mdi:security
+    id: cameras
+    cards:
+      - type: picture-entity
+        entity: camera.foscam_camera
+      - type: picture-entity
+        entity: camera.foscam_camera_2
+      - type: entities
+        title: Smoke sensors
+        entities:
+          - entity: binary_sensor.smoke_kitchen
+          - entity: binary_sensor.smoke_livingroom
+          - entity: binary_sensor.smoke_sensor_kitchen
+            name: Kitchen
+          - entity: binary_sensor.smoke_sensor_livingroom
+            name: Livingroom
+
+  - title: System
+    icon: mdi:settings
+    id: system
+    cards:
+      - type: entities
+        title: Hardware
+        entities:
+          - entity: sensor.memory_use_percent
+            name: Memory use
+          - entity: sensor.disk_use_percent_
+            name: DIsk use
+          - sensor.hass_db_size
+          - sensor.last_boot
+
+      - type: entities
+        title: Network
+        entities:
+          - sensor.speedtest_ping
+          - sensor.speedtest_download
+          - sensor.speedtest_upload
+          - sensor.ssl_cert_expiry
+
+      - type: entities
+        title: Batteries Radiators
+        entities:
+          - sensor.battery_livingroom_1
+          - sensor.battery_livingroom_2
+          - sensor.battery_kitchen
+          - sensor.battery_bedroom
+          - sensor.battery_bathroom
+      - type: entities
+        title: Batteries Smoke Sensors
+        entities:
+          - sensor.battery_smoke_sensor_kitchen
+          - sensor.battery_smoke_sensor_livingroom

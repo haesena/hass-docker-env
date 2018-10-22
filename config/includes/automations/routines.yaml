@@ -1,0 +1,77 @@
+- alias: "Close up"
+  trigger:
+    - platform: time
+      at: '22:00:30'
+    - platform: zone
+      event: enter
+      zone: zone.home
+      entity_id: device_tracker.google_maps_115300975537482092784
+  condition:
+    condition: and
+    conditions:
+      - condition: time
+        after: '22:00:00'
+        before: '23:59:00'
+      - condition: zone
+        entity_id: device_tracker.google_maps_115300975537482092784
+        zone: zone.home
+  action:
+    service: notify.notify
+    data:
+      message: "It's getting late, do you want to close all covers?"
+      title: "Close up"
+      target: "alex_phone"
+      data:
+        tag: "close_covers"
+        actions:
+          - action: close_all_covers
+            title: "Close all"
+- alias: "CLose up confirmed"
+  trigger:
+    - platform: event
+      event_type: html5_notification.clicked
+      event_data:
+        action: close_all_covers
+  action:
+    service: script.turn_on
+    entity_id: script.close_all_covers
+
+- alias: "Open up"
+  trigger:
+    - platform: time
+      at: '06:00:00'
+  condition:
+  - condition: zone
+    entity_id: device_tracker.google_maps_115300975537482092784
+    zone: zone.home
+  action:
+    service: notify.notify
+    data:
+      message: "Good morning, do you want to open the covers?"
+      title: "Open up"
+      target: "alex_phone"
+      data:
+        tag: "open_covers"
+        actions:
+          - action: open_covers_a_little
+            title: "Open a little"
+          - action: open_all_covers
+            title: "Open all"
+- alias: "Open a little confirmed"
+  trigger:
+    - platform: event
+      event_type: html5_notification.clicked
+      event_data:
+        action: open_covers_a_little
+  action:
+    service: script.turn_on
+    entity_id: script.covers_sunny_mode
+- alias: "Open all confirmed"
+  trigger:
+    - platform: event
+      event_type: html5_notification.clicked
+      event_data:
+        action: open_all_covers
+  action:
+    service: script.turn_on
+    entity_id: script.open_all_covers

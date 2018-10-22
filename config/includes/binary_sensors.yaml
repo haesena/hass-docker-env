@@ -1,0 +1,8 @@
+- platform: template
+  sensors:
+    smoke_kitchen:
+      friendly_name: "Kitchen"
+      value_template: "{{ states('sensor.fibaro_system_fgsd002_smoke_sensor_smoke_2')|float > 0 }}"
+    smoke_livingroom:
+      friendly_name: "Livingroom"
+      value_template: "{{ states('sensor.fibaro_system_fgsd002_smoke_sensor_smoke_4')|float > 0 }}"

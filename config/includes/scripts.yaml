@@ -1,0 +1,114 @@
+turn_off_heating:
+  alias: Turn off 
+  sequence:
+    - service: climate.set_temperature
+      data:
+        entity_id: climate.radiator_livingroom_1
+        temperature: 10
+    - service: climate.set_temperature
+      data:
+        entity_id: climate.radiator_livingroom_2
+        temperature: 10
+    - service: climate.set_temperature
+      data:
+        entity_id: climate.radiator_kitchen
+        temperature: 10
+    - service: climate.set_temperature
+      data:
+        entity_id: climate.radiator_bedroom
+        temperature: 10
+    - service: climate.set_temperature
+      data:
+        entity_id: climate.radiator_bathroom
+        temperature: 10
+
+turn_on_heating:
+  alias: Turn on 
+  sequence:
+    - service: climate.set_temperature
+      data:
+        entity_id: climate.radiator_livingroom_1
+        temperature: 19
+    - service: climate.set_temperature
+      data:
+        entity_id: climate.radiator_livingroom_2
+        temperature: 19
+    - service: climate.set_temperature
+      data:
+        entity_id: climate.radiator_kitchen
+        temperature: 19
+    - service: climate.set_temperature
+      data:
+        entity_id: climate.radiator_bedroom
+        temperature: 19
+    - service: climate.set_temperature
+      data:
+        entity_id: climate.radiator_bathroom
+        temperature: 19
+
+close_all_covers:
+  alias: Close all
+  sequence:
+    - service: cover.close_cover
+      data: 
+        entity_id: cover.shutter_hallway
+    - service: cover.close_cover
+      data: 
+        entity_id: cover.shutter_bedroom
+    - service: cover.close_cover
+      data: 
+        entity_id: cover.shutter_terrace
+    - service: cover.close_cover
+      data: 
+        entity_id: cover.shutter_garden
+
+open_all_covers:
+  alias: Open all
+  sequence:
+    - service: cover.open_cover
+      data: 
+        entity_id: cover.shutter_hallway
+    - service: cover.open_cover
+      data: 
+        entity_id: cover.shutter_bedroom
+    - service: cover.open_cover
+      data: 
+        entity_id: cover.shutter_terrace
+    - service: cover.open_cover
+      data: 
+        entity_id: cover.shutter_garden
+
+covers_sunny_mode:
+  alias: Sunny mode
+  sequence:
+    - service: cover.open_cover
+      data: 
+        entity_id: cover.shutter_hallway
+    - service: cover.close_cover
+      data: 
+        entity_id: cover.shutter_bedroom
+    - service: cover.open_cover
+      data: 
+        entity_id: cover.shutter_terrace
+    - service: cover.set_cover_position
+      data: 
+        entity_id: cover.shutter_garden
+        position: 40
+
+covers_movie_mode:
+  alias: Movie mode
+  sequence:
+    - service: cover.open_cover
+      data: 
+        entity_id: cover.shutter_hallway
+    - service: cover.close_cover
+      data: 
+        entity_id: cover.shutter_bedroom
+    - service: cover.set_cover_position
+      data: 
+        entity_id: cover.shutter_terrace
+        position: 40
+    - service: cover.set_cover_position
+      data: 
+        entity_id: cover.shutter_garden
+        position: 40

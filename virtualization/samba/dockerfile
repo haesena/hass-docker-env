@@ -9,16 +9,17 @@ RUN apk add samba samba-common-tools supervisor && rm -rf /var/cache/apk/*
 EXPOSE 137/udp 138/udp 139 445
 
 # create a dir for the config and the share
-RUN mkdir -m 1777 /cfg /shared
+RUN mkdir -m 1777 /cfg /shared /shared2
 
 # copy config files from project folder to get a default config going for samba and supervisord
-COPY ./virtualization/samba/*.conf /cfg/
+COPY ./smb.conf /cfg/
+COPY ./supervisord.conf /cfg/
 
 RUN addgroup -g 1000 rio && adduser -D -H -G rio -s /bin/false -u 1000 pi
 
-RUN echo -e "sonne\nsonne" | smbpasswd -a -s -c /cfg/smb.conf pi
+RUN echo -e "your_password\nyour_password" | smbpasswd -a -s -c /cfg/smb.conf pi
 
-VOLUME /cfg /shared
+VOLUME /cfg /shared /shared2
 
 ENTRYPOINT ["supervisord", "-c", "/cfg/supervisord.conf"]
 

@@ -1,0 +1,14 @@
+#secrets: /conf/secrets.yaml
+log:
+  accessfile: STDOUT
+  errorfile: STDOUT
+  logfile: STDOUT
+  log_generations: 3
+  log_size: 1000000
+appdaemon:
+  plugins:
+    HASS:
+      type: hass
+      ha_url: !secret hass_url
+      ha_key: !secret hass_pw
+      cert_verify: False
