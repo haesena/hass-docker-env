@@ -21,14 +21,14 @@ services:
   mqtt:
     container_name: mqtt
     build:
-      context: ./
-      dockerfile: virtualization/mosquitto/dockerfile
+      context: ./virtualization/mosquitto/
+      dockerfile: ./dockerfile
+    environment:
+      - MQTT_USER=YOUR_MQTT_USER
+      - YOUR_MQTT_PASSWDD
     ports:
       - "1883:1883"
       - "9001:9001"
-    volumes:
-      - ./virtualization/mosquitto/config:/mqtt/config
-    restart: always
 
   mysql:
     container_name: mysql
@@ -37,10 +37,10 @@ services:
     ports:
       - "3306:3306"
     environment:
-      - MYSQL_ROOT_PASSWORD=mysql_root_password
-      - MYSQL_DATABASE=hass_db
-      - MYSQL_USER=hassuser
-      - MYSQL_PASSWORD=mysql_password
+      - MYSQL_ROOT_PASSWORD=YOUR_MYSQL_ROOT_PASSWORD
+      - MYSQL_DATABASE=YOUR_HASS_DB_NAME
+      - MYSQL_USER=YOUR_HASS_DB_USER
+      - MYSQL_PASSWORD=YOUR_HASS_DB_PASSWD
     volumes:
       - /data/hass-db/mysql:/var/lib/mysql
 
