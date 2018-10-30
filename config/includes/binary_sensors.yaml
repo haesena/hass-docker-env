@@ -6,3 +6,9 @@
     smoke_livingroom:
       friendly_name: "Livingroom"
       value_template: "{{ states('sensor.fibaro_system_fgsd002_smoke_sensor_smoke_4')|float > 0 }}"
+    smoke_bedroom:
+      friendly_name: "Bedroom"
+      value_template: "{{ states('sensor.fibaro_system_fgsd002_smoke_sensor_smoke_6')|float > 0 }}"
+    smoke_hallway:
+      friendly_name: "Hallway"
+      value_template: "{{ states('sensor.fibaro_system_fgsd002_smoke_sensor_smoke_8')|float > 0 }}"

@@ -133,10 +133,8 @@ views:
         entities:
           - entity: binary_sensor.smoke_kitchen
           - entity: binary_sensor.smoke_livingroom
-          - entity: binary_sensor.smoke_sensor_kitchen
-            name: Kitchen
-          - entity: binary_sensor.smoke_sensor_livingroom
-            name: Livingroom
+          - entity: binary_sensor.smoke_bedroom
+          - entity: binary_sensor.smoke_hallway
 
   - title: System
     icon: mdi:settings
@@ -173,3 +171,5 @@ views:
         entities:
           - sensor.battery_smoke_sensor_kitchen
           - sensor.battery_smoke_sensor_livingroom
+          - sensor.battery_smoke_sensor_bedroom
+          - sensor.battery_smoke_sensor_hallway

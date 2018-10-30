@@ -18,10 +18,10 @@ RUN apt-get update && \
 	openssl rsa -in privkey.pem -out privkey.pem && \
 	mv privkey.pem fullchain.pem /etc/letsencrypt/live/haesen.duckdns.org
 
-COPY ./virtualization/nginx/nginx.conf /etc/nginx/
-COPY ./virtualization/nginx/dhparams.pem /etc/nginx/ssl/
-COPY ./virtualization/nginx/hass.https.conf /etc/nginx/sites-available/
-COPY ./virtualization/nginx/mqtt.conf /etc/nginx/sites-available/
+COPY ./nginx.conf /etc/nginx/
+COPY ./dhparams.pem /etc/nginx/ssl/
+COPY ./hass.https.conf /etc/nginx/sites-available/
+COPY ./mqtt.conf /etc/nginx/sites-available/
 
 # if the copied dhparams.pem file is empty (default), remove it and create a valid one. 
 # This way, the user can replace the empty dhparams.pem file with a valid one, to skip this step 

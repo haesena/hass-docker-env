@@ -7,42 +7,15 @@ services:
 
   samba:
     container_name: samba
-    build:
-      context: ./virtualization/samba/
-      dockerfile: ./dockerfile
+    image: trnape/rpi-samba
     ports:
-      - "137-139:137-139"
       - "445:445"
     volumes:
-      - .:/shared
-      - /data/nas:/shared2
-    restart: always
-
-  mqtt:
-    container_name: mqtt
-    build:
-      context: ./virtualization/mosquitto/
-      dockerfile: ./dockerfile
-    environment:
-      - MQTT_USER=YOUR_MQTT_USER
-      - YOUR_MQTT_PASSWDD
-    ports:
-      - "1883:1883"
-      - "9001:9001"
-
-  mysql:
-    container_name: mysql
-    image: hypriot/rpi-mysql
-    network_mode: host
-    ports:
-      - "3306:3306"
-    environment:
-      - MYSQL_ROOT_PASSWORD=YOUR_MYSQL_ROOT_PASSWORD
-      - MYSQL_DATABASE=YOUR_HASS_DB_NAME
-      - MYSQL_USER=YOUR_HASS_DB_USER
-      - MYSQL_PASSWORD=YOUR_HASS_DB_PASSWD
-    volumes:
-      - /data/hass-db/mysql:/var/lib/mysql
+      - ./:/shared/hass
+    restart: unless-stopped
+    command: |
+      -u "data:YOUR_SAMBA_PASSWORD" 
+      -s "HassCfg:/shared/hass:rw:data"
 
   ftp:
     container_name: ftp
@@ -62,39 +35,23 @@ services:
       dockerfile: ./dockerfile
     volumes:
       - ./config:/config
-      - /data/nas/hass:/data
-      - /data/hass-db:/hass-db
       - /etc/localtime:/etc/localtime:ro
       - letsencrypt_certs:/etc/letsencrypt
     expose:
       - "8123"
     depends_on:
       - samba 
-      - mqtt 
-      - mysql
     network_mode: host
     restart: unless-stopped
     devices:
       - "/dev/ttyACM0:/dev/ttyACM0"
       - "/dev/ttyUSB0:/dev/ttyUSB0"
 
-  appdaemon:
-    container_name: appdaemon
-    build:
-      context: ./virtualization/appdaemon/
-      dockerfile: ./dockerfile
-    volumes:
-      - ./config:/conf
-      - /etc/localtime:/etc/localtime:ro
-    restart: always
-    depends_on:
-      - homeassistant
-
   nginx:
     container_name: nginx
     build:
-      context: ./
-      dockerfile: virtualization/nginx/dockerfile
+      context: ./virtualization/nginx/
+      dockerfile: ./dockerfile
       args:
         - domain=YOUR_DOMAIN
     ports:
@@ -107,7 +64,7 @@ services:
       - letsencrypt_www:/var/www/letsencrypt
       - letsencrypt_certs:/etc/letsencrypt
     network_mode: host
-    restart: always
+    restart: unless-stopped
 
   letsencrypt:
     build:

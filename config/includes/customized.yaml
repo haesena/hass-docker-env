@@ -14,3 +14,7 @@ binary_sensor.smoke_kitchen:
   device_class: smoke
 binary_sensor.smoke_livingroom:
   device_class: smoke
+binary_sensor.smoke_bedroom:
+  device_class: smoke
+binary_sensor.smoke_hallway:
+  device_class: smoke

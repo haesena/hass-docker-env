@@ -93,7 +93,7 @@ google_assistant:
   api_key: !secret ga_api_key
 
 mqtt:
-  broker: 192.168.1.30
+  broker: 192.168.1.61
   port: 1883
   client_id: home-assistant-1
   username: !secret mqtt_username

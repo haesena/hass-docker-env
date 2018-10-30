@@ -74,3 +74,25 @@
       target: "alex_phone"
       data:
         url: "/states/group.system"
+
+- alias: "Fire in the hole"
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.smoke_kitchen
+      to: 'on'
+    - platform: state
+      entity_id: binary_sensor.smoke_livingroom
+      to: 'on'
+    - platform: state
+      entity_id: binary_sensor.smoke_bedroom
+      to: 'on'
+    - platform: state
+      entity_id: binary_sensor.smoke_hallway
+      to: 'on'
+  action:
+    service: notify.notify
+    data:
+      message: "Smoke has been detected in the {{ trigger.entity_id.friendly_name }} ."
+      title: "Fire in the hole"
+      data:
+        url: "/lovelace/cameras"

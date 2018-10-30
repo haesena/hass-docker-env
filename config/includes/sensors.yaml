@@ -45,6 +45,7 @@
   sensors:
     battery_livingroom_1:
       friendly_name: 'Livingroom 1'
+      entity_id: zwave.livingroom_radiator_1
       value_template: >-
         {% if states.zwave.livingroom_radiator_1 %}
         {{ states.zwave.livingroom_radiator_1.attributes.battery_level }}
@@ -53,6 +54,7 @@
       icon_template: mdi:battery-charging
     battery_livingroom_2:
       friendly_name: 'Livingroom 2'
+      entity_id: zwave.livingroom_radiator_2
       value_template: >-
         {% if states.zwave.livingroom_radiator_2 %}
         {{ states.zwave.livingroom_radiator_2.attributes.battery_level }}
@@ -61,6 +63,7 @@
       icon_template: mdi:battery-charging
     battery_kitchen:
       friendly_name: 'Kitchen'
+      entity_id: zwave.kitchen_radiator
       value_template: >-
         {% if states.zwave.kitchen_radiator %}
         {{ states.zwave.kitchen_radiator.attributes.battery_level }}
@@ -69,6 +72,7 @@
       icon_template: mdi:battery-charging
     battery_bedroom:
       friendly_name: 'Bedroom'
+      entity_id: zwave.bedroom_radiator
       value_template: >-
         {% if states.zwave.bedroom_radiator %}
         {{ states.zwave.bedroom_radiator.attributes.battery_level }}
@@ -77,14 +81,17 @@
       icon_template: mdi:battery-charging
     battery_bathroom:
       friendly_name: 'Bathroom'
+      entity_id: zwave.bathroom_radiator
       value_template: >-
         {% if states.zwave.bathroom_radiator %}
         {{ states.zwave.bathroom_radiator.attributes.battery_level }}
         {% else %}n/a{% endif %}
       unit_of_measurement: '%'
       icon_template: mdi:battery-charging
+
     battery_smoke_sensor_kitchen:
       friendly_name: 'Kitchen'
+      entity_id: zwave.kitchen_smoke_sensor
       value_template: >-
         {% if states.zwave.kitchen_smoke_sensor %}
         {{ states.zwave.kitchen_smoke_sensor.attributes.battery_level }}
@@ -93,9 +100,28 @@
       icon_template: mdi:battery-charging
     battery_smoke_sensor_livingroom:
       friendly_name: 'Livingroom'
+      entity_id: zwave.livingroom_smoke_sensor
       value_template: >-
         {% if states.zwave.livingroom_smoke_sensor %}
         {{ states.zwave.livingroom_smoke_sensor.attributes.battery_level }}
+        {% else %}n/a{% endif %}
+      unit_of_measurement: '%'
+      icon_template: mdi:battery-charging
+    battery_smoke_sensor_bedroom:
+      friendly_name: 'Kitchen'
+      entity_id: zwave.bedroom_smoke_sensor
+      value_template: >-
+        {% if states.zwave.bedroom_smoke_sensor %}
+        {{ states.zwave.bedroom_smoke_sensor.attributes.battery_level }}
+        {% else %}n/a{% endif %}
+      unit_of_measurement: '%'
+      icon_template: mdi:battery-charging
+    battery_smoke_sensor_hallway:
+      friendly_name: 'Livingroom'
+      entity_id: zwave.hallway_smoke_sensor
+      value_template: >-
+        {% if states.zwave.hallway_smoke_sensor %}
+        {{ states.zwave.hallway_smoke_sensor.attributes.battery_level }}
         {% else %}n/a{% endif %}
       unit_of_measurement: '%'
       icon_template: mdi:battery-charging

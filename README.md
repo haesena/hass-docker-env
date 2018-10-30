@@ -39,6 +39,9 @@ passwd
 sudo apt-get update
 sudo apt-get upgrade -y
 
+# set your current timezone
+sudo cp /usr/share/zoneinfo/Europe/Paris /etc/localtime
+
 # install git
 sudo apt-get install git
 
